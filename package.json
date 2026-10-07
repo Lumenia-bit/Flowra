@@ -1,0 +1,68 @@
+{
+  "name": "flowra",
+  "version": "1.0.0",
+  "description": "Local visual Telegram bot builder",
+  "main": "dist-electron/main/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k \"vite\" \"npm:dev:electron\"",
+    "dev:electron": "wait-on tcp:5173 && npm run build:electron && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.electron.json --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "build:renderer": "vite build",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "build": "npm run typecheck && npm run build:renderer && npm run build:electron",
+    "dist": "npm run build && electron-builder",
+    "start": "electron ."
+  },
+  "dependencies": {
+    "@xyflow/react": "^12.8.6",
+    "jszip": "^3.10.1",
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@types/node": "^22.10.5",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
+    "electron": "^35.0.0",
+    "electron-builder": "^25.1.8",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.14.0",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.19.1",
+    "vite": "^6.0.5",
+    "vitest": "^2.1.8",
+    "wait-on": "^8.0.1"
+  },
+  "build": {
+    "appId": "app.flowra.desktop",
+    "productName": "Flowra",
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "dist-electron/bot/**/*",
+      "dist-electron/database/**/*",
+      "dist-electron/shared/**/*"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": "nsis"
+    }
+  }
+}
